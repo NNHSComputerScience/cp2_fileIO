@@ -37,26 +37,24 @@ aligning with f-strings:
     right-align = f'xxxxxxxxx{expression:>15}xxxxxxxxxx'
 '''
 
-def get_data():
-    """Return a list with the """
-    with open("College_Data.csv", "r") as data: 
-        data_list = data.readlines()
-        for line in data_list:
-            line = line.rstrip().split(",")
-            print(f"|{line[0]:<50}|{line[1]:^25}|{line[2]:>25}|")  
+# working with custom data in csv files
+#   filter/ analysis on the data in College_Data.csv
 
-#print_data()
+def print_data(data):
+    """Display the data in College_Data.csv in a formatted table"""
+    #print(f"|{'College':<50}|{'Out-of-State Tuition':^20}|{'Graduation Rate':^20}|")
+    for line in data[1:25]: # skip the header row and only show the first 25 rows of data
+        line = line.strip().split(",")
+        print(f"|{line[0]:<50}|${line[9]:^20}|{line[-1]:^20}%|")
     
 # filter/analyze the data in College_Data.csv to find the schools with:
 #       <50% acceptance rate 
 #       <$30,000 oos tuition 
 #       >75% graduation rate
 # print the name of the school and data in a formatted table
-def analyze_data():
-    with open("College_Data.csv", "r") as file:
-        data_list = file.readlines() 
+def analyze_data(data):
         #print(f"|{"College":<50}|{"Acceptance Rate":>25}|{"Out-of-State Tuition":>25}|{"Graduation Rate":>25}|")
-        for line in data_list[1:]: # skip the header row
+        for line in data[1:]: # skip the header row
             line = line.strip().split(",")
             school_name = line[0]
             acceptance_rate = (float(line[3])/float(line[2]) * 100)
@@ -64,5 +62,10 @@ def analyze_data():
             oos_tuition = float(line[9])
             graduation_rate = float(line[-1])
             if acceptance_rate < 50 and oos_tuition < 30000 and graduation_rate > 75:
-                print(f"|{school_name[:25]:<25}|{acceptance_rate:^25.2f}%|${oos_tuition:^25,.2f}|{graduation_rate:^25.2f}%|")
-#analyze_data()
+                print(f"|{school_name}|")
+                #print(f"|{school_name[:25]:<25}|{acceptance_rate:^25.2f}%|${oos_tuition:^25,.2f}|{graduation_rate:^25.2f}%|")
+
+with open("College_Data.csv", "r") as data: 
+    data_list = data.readlines()
+print_data(data_list)
+analyze_data(data_list)
